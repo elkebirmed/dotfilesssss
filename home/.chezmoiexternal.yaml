@@ -7,7 +7,8 @@
   type: archive
   url: "https://github.com/ohmyzsh/ohmyzsh/archive/{{ template "get-github-head-revision" list "ohmyzsh/ohmyzsh" $cache }}.tar.gz"
   stripComponents: 1
-  exact: true
+  # waiting for https://github.com/twpayne/chezmoi/issues/1614#issuecomment-966524408
+  # exact: true
 
 ".oh-my-zsh/custom/themes/powerlevel10k":
   type: archive

@@ -14,7 +14,7 @@ if ! getent passwd '{{ .chezmoi.username }}' | cut -d : -f 7- | grep -q "^${zsh_
 fi
 
 # Enable SDDM if it's not enabled
-if ! systemctl is-enabled sddm.service; then
+if ! systemctl is-enabled sddm.service > /dev/null; then
     log_task "Enabling SDDM"
     c sudo systemctl enable sddm.service
 fi
