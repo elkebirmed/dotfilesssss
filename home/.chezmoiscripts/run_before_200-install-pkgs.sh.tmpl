@@ -1,0 +1,16 @@
+#!/bin/bash
+
+# {{ include (joinPath .chezmoi.sourceDir ".chezmoitemplates/scripts-library") }}
+
+# The following line is for ShellCheck to correctly identify the above included library
+true || source ../.chezmoitemplates/scripts-library
+
+if ! command -v rustc &>/dev/null; then
+    log_task "Installing Rust"
+    curl https://sh.rustup.rs -sSf | sh -s -- -y --no-modify-path
+fi
+
+if ! command -v node &>/dev/null; then
+    log_task "Installing nodejs"
+    nvm install node
+fi

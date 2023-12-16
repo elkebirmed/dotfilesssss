@@ -1,0 +1,97 @@
+# Load .profile
+# -----------------------------------------------------------------------------
+if [[ -r "${HOME}/.profile" ]]; then
+  # Do not use emulate here.
+  source "${HOME}/.profile"
+fi
+
+# https://github.com/romkatv/powerlevel10k#how-do-i-initialize-direnv-when-using-instant-prompt
+# -----------------------------------------------------------------------------
+if (( ${+commands[direnv]} )); then
+  emulate zsh -c "$(direnv export zsh)"
+fi
+
+# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+# Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block; everything else may go below.
+# -----------------------------------------------------------------------------
+if [[ -r "${XDG_CACHE_HOME:-${HOME}/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-${HOME}/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
+# https://github.com/romkatv/powerlevel10k#how-do-i-initialize-direnv-when-using-instant-prompt
+# -----------------------------------------------------------------------------
+if (( ${+commands[direnv]} )); then
+  emulate zsh -c "$(direnv hook zsh)"
+fi
+
+# Options
+# -----------------------------------------------------------------------------
+if [[ -f "${HOME}/.config/zsh/options.zsh" ]]; then
+  source "${HOME}/.config/zsh/options.zsh"
+fi
+
+# https://github.com/zsh-users/zsh-completions/issues/603
+# -----------------------------------------------------------------------------
+fpath+="${ZSH_CUSTOM:-"${ZSH}/custom"}/plugins/zsh-completions/src"
+
+# Source oh-my-zsh
+# -----------------------------------------------------------------------------
+source "${ZSH}/oh-my-zsh.sh"
+
+# Enable homebrew zsh completions
+# -----------------------------------------------------------------------------
+if (( ${+commands[brew]} )); then
+  fpath+="$(brew --prefix)/share/zsh/site-functions"
+fi
+
+# Load functions
+# -----------------------------------------------------------------------------
+if [[ -r "${HOME}/.config/zsh/functions.zsh" ]]; then
+  # ksh is closer than sh to bash
+  emulate ksh -c "source '${HOME}/.config/zsh/functions.zsh'"
+fi
+
+# Load aliases
+# -----------------------------------------------------------------------------
+if [[ -r "${HOME}/.config/zsh/aliases.zsh" ]]; then
+  emulate ksh -c "source '${HOME}/.config/zsh/aliases.zsh'"
+fi
+
+# Standard shell integration protocol support.
+# https://github.com/microsoft/vscode/issues/153400#issue-1286534600
+# -----------------------------------------------------------------------------
+if [[ "${TERM_PROGRAM}" == "vscode" ]]; then
+  ITERM_SHELL_INTEGRATION_INSTALLED="Yes"
+fi
+
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+# -----------------------------------------------------------------------------
+if [[ -f "${HOME}/.config/zsh/p10k.zsh" ]]; then
+  source "${HOME}/.config/zsh/p10k.zsh"
+fi
+
+# FZF
+# -----------------------------------------------------------------------------
+if [[ -f "${HOME}/.config/zsh/fzf.zsh" ]]; then
+  source "${HOME}/.config/zsh/fzf.zsh"
+fi
+
+# Key binding
+# -----------------------------------------------------------------------------
+if [[ -f "${HOME}/.config/zsh/key-binding.zsh" ]]; then
+  source "${HOME}/.config/zsh/key-binding.zsh"
+fi
+
+# Init zoxide
+# -----------------------------------------------------------------------------
+eval "$(zoxide init zsh)"
+
+# Init Tmuxifier
+# -----------------------------------------------------------------------------
+eval "$(tmuxifier init -)"
+
+# initialize autocomplete here, otherwise functions won't be loaded
+# -----------------------------------------------------------------------------
+autoload -U compinit
+compinit

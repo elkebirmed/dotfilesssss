@@ -1,0 +1,42 @@
+{
+    "editor.codeActionsOnSave": {
+        "source.fixAll.shellcheck": true
+    },
+    // Disable ShellCheck from Bash IDE as we use VS Code ShellCheck
+    "bashIde.shellcheckPath": "",
+    "[shellscript]": {
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "foxundermoon.shell-format"
+    },
+    "shellcheck.ignorePatterns": {
+        "**/*.zsh": true,
+        "**/*.zshrc": true,
+        "**/zshrc": true,
+        "**/*.zprofile": true,
+        "**/zprofile": true,
+        "**/*.zlogin": true,
+        "**/zlogin": true,
+        "**/*.zlogout": true,
+        "**/zlogout": true,
+        "**/*.zshenv": true,
+        "**/zshenv": true,
+        "**/*.zsh-theme": true,
+        // custom
+        "**/*_zshrc": true
+    },
+    "files.associations": {
+        "*_zshrc": "shellscript",
+        "*_antigenrc": "shellscript",
+        "*_profile.tmpl": "shellscript",
+        "*_bashrc": "shellscript",
+        "**/home/**/run_*": "shellscript",
+        "**/home/**/executable_*": "shellscript",
+        "**/home/**/modify_*": "helm",
+        "*.yaml.tmpl": "helm",
+        ".chezmoi*.yaml": "helm",
+        ".chezmoiignore": "helm",
+        ".chezmoiremove": "helm",
+        "**/.chezmoitemplates/*": "helm",
+        "**/.chezmoitemplates/*-library": "shellscript"
+    }
+}

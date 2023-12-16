@@ -1,0 +1,20 @@
+#!/bin/bash
+
+# {{ template "scripts-library" }}
+
+# The following line is for ShellCheck to correctly identify the above include
+true || source ../.chezmoitemplates/scripts-library
+
+zsh_path="/bin/zsh"
+
+if ! getent passwd '{{ .chezmoi.username }}' | cut -d : -f 7- | grep -q "^${zsh_path}$"; then
+    log_task "Configuring ZSH as default shell"
+
+    c sudo usermod --shell "${zsh_path}" '{{ .chezmoi.username }}'
+fi
+
+# Enable SDDM if it's not enabled
+if ! systemctl is-enabled sddm.service; then
+    log_task "Enabling SDDM"
+    c sudo systemctl enable sddm.service
+fi

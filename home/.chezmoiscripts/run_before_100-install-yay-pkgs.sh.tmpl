@@ -1,0 +1,92 @@
+#!/bin/bash
+
+# {{ include (joinPath .chezmoi.sourceDir ".chezmoitemplates/scripts-library") }}
+
+# The following line is for ShellCheck to correctly identify the above included library
+true || source ../.chezmoitemplates/scripts-library
+
+readonly wanted_packages=(
+    asciinema
+    alacritty
+    base
+    base-devel
+    bat
+    btrfs-progs
+    efibootmgr
+    # exa
+    fd
+    firefox
+    foot
+    fzf
+    git
+    github-cli
+    gnome-keyring
+    google-chrome
+    gst-plugin-pipewire
+    hadolint
+    hyprpaper
+    hyprland-git
+    intel-ucode
+    kitty
+    less
+    lib32-mesa
+    libpulse
+    mako
+    mesa
+    neofetch
+    neovim
+    noto-fonts-emoji
+    nvm
+    pipewire
+    pipewire-alsa
+    pipewire-jack
+    pipewire-pulse
+    polkit-gnome
+    python-requests
+    ripgrep
+    sddm
+    starship
+    swaylock-effects
+    tmux
+    thunar
+    ttf-jetbrains-mono-nerd
+    vim
+    visual-studio-code-bin
+    vulkan-mesa-layers
+    waybar
+    wget
+    wireplumber
+    wofi
+    xdg-desktop-portal-hyprland
+    xf86-video-nouveau
+    yarn
+    zoxide
+    zram-generator
+    zsh
+)
+missing_packages=()
+
+if ! command -v yay &>/dev/null; then
+    log_task "Installing yay"
+
+    sudo pacman -Sy
+    sudo pacman -S --needed base-devel git
+    sudo git clone https://aur.archlinux.org/yay-git.git
+    sudo chown -R "$(whoami || true)":"$(whoami || true)" yay-git/
+    cd yay-git/
+    makepkg -si
+    sudo rm -rf yay-git
+    yay -Suy
+fi
+
+for package in "${wanted_packages[@]}"; do
+    if ! is_package_installed "${package}"; then
+        missing_packages+=("${package}")
+    fi
+done
+
+if [[ ${#missing_packages[@]} -gt 0 ]]; then
+    log_task "Installing missing packages with yay: ${missing_packages[*]}"
+
+    c yay -S "${missing_packages[@]}"
+fi
