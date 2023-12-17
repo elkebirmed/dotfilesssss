@@ -174,3 +174,7 @@ tooltip {
     margin-left: 9px;
     padding-left: 3px;
 }
+#custom-space {
+    background-color: @main-bg;
+    margin: 4px 0px 4px 0px;
+}
